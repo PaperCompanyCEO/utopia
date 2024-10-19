@@ -1,0 +1,98 @@
+{:paths   ["src/clj"
+           "resources"
+           "src/cljs"]
+
+ :deps    {org.clojure/clojure             {:mvn/version "1.12.0"}
+
+           ;; Cider
+           cider/cider-nrepl {:mvn/version "0.50.2"}
+
+           ;; Config
+           aero/aero {:mvn/version "1.1.6"}
+
+           ;; Integrant
+           integrant/integrant {:mvn/version "0.13.0"}
+           
+           ;; Routing
+           metosin/reitit                  {:mvn/version "0.6.0"}
+
+           ;; Ring
+           metosin/ring-http-response      {:mvn/version "0.9.3"}
+           ring/ring-core                  {:mvn/version "1.12.0"}
+           ring/ring-defaults              {:mvn/version "0.5.0"}
+           luminus/ring-undertow-adapter {:mvn/version "1.3.1"}
+           
+           ;; Auth
+           buddy/buddy-auth {:mvn/version "3.0.323"}
+           
+           ;; Logging
+           ch.qos.logback/logback-classic  {:mvn/version "1.5.7"}
+           
+           ;; Data coercion
+           luminus-transit/luminus-transit {:mvn/version "0.1.6"
+                                            :exclusions [com.cognitect/transit-clj]}
+           metosin/malli {:mvn/version "0.16.4"}
+           metosin/muuntaja                {:mvn/version "0.6.8"}
+
+           ;; Web Socket
+           com.taoensso/sente {:mvn/version "1.17.0"}
+
+           ;; Http Client
+           clj-http/clj-http {:mvn/version "3.13.0"}
+
+           ;; Database Access
+           migratus/migratus {:mvn/version "1.6.0"}
+           conman/conman {:mvn/version "0.9.6"}
+           com.mysql/mysql-connector-j {:mvn/version "9.0.0"}
+           org.postgresql/postgresql {:mvn/version "42.7.4"}
+
+           ;; JSON
+           cheshire/cheshire {:mvn/version "5.13.0"}}
+ :aliases {:build {:deps {io.github.clojure/tools.build {:mvn/version "0.9.6"}}
+                   :ns-default build}
+
+           :dev  {:extra-deps  {com.lambdaisland/classpath      {:mvn/version "0.5.48"}
+                                criterium/criterium             {:mvn/version "0.4.6"}
+                                expound/expound                 {:mvn/version "0.9.0"}
+                                integrant/repl                  {:mvn/version "0.3.3"}
+                                mvxcvi/cljstyle                 {:mvn/version "0.16.630"}
+                                pjstadig/humane-test-output     {:mvn/version "0.11.0"}
+                                ring/ring-devel                 {:mvn/version "1.12.0"}
+                                ring/ring-mock                  {:mvn/version "0.4.0"}
+                                org.clojure/tools.namespace     {:mvn/version "1.4.4"}}
+                  :extra-paths ["env/dev/clj" "env/dev/resources" "test/clj"]}
+           
+           :nrepl {:extra-deps {nrepl/nrepl {:mvn/version "1.1.0"}}
+                   :main-opts  ["-m" "nrepl.cmdline" "-i"]}
+           
+           :cider {:extra-deps {nrepl/nrepl       {:mvn/version "1.1.0"}}
+                   :main-opts  ["-m" "nrepl.cmdline" "--middleware" "[cider.nrepl/cider-middleware]" "-i"]}
+
+           :test {:extra-deps  {com.lambdaisland/classpath      {:mvn/version "0.5.48"}
+                                criterium/criterium             {:mvn/version "0.4.6"}
+                                expound/expound                 {:mvn/version "0.9.0"}
+                                integrant/repl                  {:mvn/version "0.3.3"}
+                                mvxcvi/cljstyle                 {:mvn/version "0.16.630"}
+                                pjstadig/humane-test-output     {:mvn/version "0.11.0"}
+                                ring/ring-devel                 {:mvn/version "1.12.0"}
+                                ring/ring-mock                  {:mvn/version "0.4.0"}
+                                io.github.kit-clj/kit-generator {:mvn/version "0.2.3"}
+                                org.clojure/tools.namespace     {:mvn/version "1.4.4"}}
+                  :exec-fn      investwith.GAT-X105.core-test/main
+                  :extra-paths ["env/dev/clj" "env/dev/resources" "env/test/resources" "test/clj"]}
+           
+           :cljs {:classpath-overrides {org.clojure/clojurescript nil}
+                  :deps  {thheller/shadow-cljs {:mvn/version "2.25.6"
+                                                :exclusions [org.clojure/clojurescript]}
+                          binaryage/devtools              {:mvn/version "1.0.3"}
+                          nrepl/nrepl                     {:mvn/version "0.8.3"}
+                          cider/cider-nrepl               {:mvn/version "0.50.2"}
+                          cljs-ajax/cljs-ajax             {:mvn/version "0.8.4"}
+                          reagent/reagent                 {:mvn/version "1.2.0"}
+                          com.taoensso/sente              {:mvn/version "1.17.0"}
+                          re-frame/re-frame               {:mvn/version "1.4.3"}
+                          com.github.flow-storm/clojurescript {:mvn/version "1.11.132-6"}
+                          com.github.flow-storm/flow-storm-inst {:mvn/version "3.17.4"}}
+                  :jvm-opts ["-Dcljs.storm.instrumentOnlyPrefixes=investwith.GAT-X105,clojure.core.async/go,hiccup"
+                             "-Dcljs.storm.instrumentEnable=true"
+                             "-Dflowstorm.startRecording=false"]}}}
