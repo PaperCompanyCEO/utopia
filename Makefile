@@ -1,14 +1,12 @@
+.PHONY: clean
 clean:
 	rm -rf target
 
-run:
-	clj -M:dev
+.PHONY: build
+build: clean
+	clj -Sforce -T:build all
 
-repl:
-	clj -M:dev:nrepl
-
-test:
-	clj -M:test
-
-uberjar:
-	clj -T:build all
+.PHONY: deploy
+deploy: build
+	sudo pkill java && \ <<<< 더 잘 타겟팅 하는 방법?
+	nohup java -jar target/utopia-standalone.jar &

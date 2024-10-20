@@ -11,21 +11,21 @@
    [integrant.core :as ig]
    [next.jdbc :as jdbc]))
 
-(defmethod ig/init-key ::utopia-connection
+(defmethod ig/init-key :db.sql/utopia-connection
   [_ {:keys [env]
       :as pool-spec}]
   (if (= env :test)
     nil
     (conman/connect! (dissoc pool-spec :env))))
 
-(defmethod ig/suspend-key! ::utopia-connection [_ _])
+(defmethod ig/suspend-key! :db.sql/utopia-connection [_ _])
 
-(defmethod ig/halt-key! ::utopia-connection
+(defmethod ig/halt-key! :db.sql/utopia-connection
   [_ conn]
   (when conn
     (conman/disconnect! conn)))
 
-(defmethod ig/resume-key ::utopia-connection
+(defmethod ig/resume-key :db.sql/utopia-connection
   [key opts old-opts old-impl]
   (ig-utils/resume-handler key opts old-opts old-impl))
 
@@ -44,7 +44,7 @@
       ([conn query params & opts]
        (conman/query conn queries query params opts)))))
 
-(defmethod ig/init-key ::utopia-query-fn
+(defmethod ig/init-key :db.sql/utopia-query-fn
   [_ {:keys [conn options filename filenames env]
       :or   {options {}}}]
   (if (= env :test)
@@ -57,9 +57,9 @@
           (queries-prod load-queries))
         {:mtimes (mapv ig-utils/last-modified filenames)}))))
 
-(defmethod ig/suspend-key! ::utopia-query-fn [_ _])
+(defmethod ig/suspend-key! :db.sql/utopia-query-fn [_ _])
 
-(defmethod ig/resume-key ::utopia-query-fn
+(defmethod ig/resume-key :db.sql/utopia-query-fn
   [k {:keys [filename filenames] :as opts} old-opts old-impl]
   (let [check-res (and (= opts old-opts)
                        (= (mapv ig-utils/last-modified (or filenames [filename]))
@@ -201,7 +201,7 @@
          (utopia-query-fn-push-fx-cofx fx-cofx cofx-res transactions tx name args)
          cofx-res)))))
 
-(defmethod ig/init-key ::utopia-migrations
+(defmethod ig/init-key :db.sql/utopia-migrations
   [_ {:keys [env migrate-on-init?]
       :or   {migrate-on-init? true}
       :as   component}]

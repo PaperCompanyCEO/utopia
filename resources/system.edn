@@ -8,8 +8,8 @@
                 :bind "127.0.0.1"}
 
  :server/http
- {:port    #long #or [#env PORT 3000]
-  :host    #or [#env HTTP_HOST "0.0.0.0"]
+ {:port    8080
+  :host    "0.0.0.0"
   :handler #ig/ref :handler/ring}
 
  :handler/ring
@@ -50,7 +50,7 @@
  {:routes #ig/ref :router/routes
   :env #ig/ref :system/env}
 
- :papercompany.utopia.effects.utopia-db/utopia-connection #profile {:dev {:env #ig/ref :system/env
+ :db.sql/utopia-connection #profile {:dev {:env #ig/ref :system/env
                                                                           :jdbc-url "jdbc:postgresql://43.202.120.110:5432/postgres?user=postgres&password=1234"}
                                                                     :test {:env #ig/ref :system/env}
                                                                     :prod {:env #ig/ref :system/env
@@ -60,21 +60,21 @@
                                                                            :max-idle 8
                                                                            :max-active 32}}
 
- :papercompany.utopia.effects.utopia-db/utopia-migrations {:env #ig/ref :system/env
+ :db.sql/utopia-migrations {:env #ig/ref :system/env
                             :store :database,
-                            :db {:datasource #ig/ref :papercompany.utopia.effects.utopia-db/utopia-connection},
+                            :db {:datasource #ig/ref :db.sql/utopia-connection},
                             :migrate-on-init? true}
 
- :papercompany.utopia.effects.utopia-db/utopia-query-fn {:env #ig/ref :system/env
-                          :conn #ig/ref :papercompany.utopia.effects.utopia-db/utopia-connection
+ :db.sql/utopia-query-fn {:env #ig/ref :system/env
+                          :conn #ig/ref :db.sql/utopia-connection
                           :options {}
                           :filenames ["queries/utopia/examples.sql"]}
  
  :papercompany.utopia/with-utopia-transaction {:env #ig/ref :system/env
-                                               :conn #ig/ref :papercompany.utopia.effects.utopia-db/utopia-connection}
+                                               :conn #ig/ref :db.sql/utopia-connection}
  
  :papercompany.utopia/utopia-query-fn {:env #ig/ref :system/env
-                                       :utopia-query-fn #ig/ref :papercompany.utopia.effects.utopia-db/utopia-query-fn}
+                                       :utopia-query-fn #ig/ref :db.sql/utopia-query-fn}
 
  :papercompany.utopia/with-dynamic-transaction {:env #ig/ref :system/env}
 

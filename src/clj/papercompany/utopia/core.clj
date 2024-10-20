@@ -6,13 +6,24 @@
    
    [clojure.tools.logging :as log]
    [integrant.core :as ig]
+
+   ;; nREPL
+   [papercompany.utopia.integrant.nrepl]
    
    ;; Edges       
    [papercompany.utopia.ring.undertow]
    [papercompany.utopia.web.handler]
 
    ;; Routes
-   [papercompany.utopia.web.routes.api])
+   [papercompany.utopia.web.routes.api]
+
+   ;; Effects
+   [papercompany.utopia.effects.utopia-db]
+   [papercompany.utopia.effects.dynamic-db]
+
+   ;; Actions
+   [papercompany.utopia.actions.core]
+   )
   (:import
    [java.util TimeZone])
   (:gen-class))
