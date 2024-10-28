@@ -16,25 +16,24 @@
   (.stop server)
   (log/info "HTTP server stopped"))
 
-(defmethod ig/expand-key :server/http
-  [k config]
-  {k (merge {:port 3000
-             :host "0.0.0.0"}
-            config)})
-
 (defmethod ig/init-key :server/http
-  [_ opts]
-  (let [handler (atom (delay (:handler opts)))]
-    {:handler handler
-     :server  (start (fn [req] (@@handler req)) (dissoc opts :handler))}))
+  [_ {:keys [env] :as opts}]
+  (when (not
+         (or (= env :test)
+             (= env :debug)))
+    (let [handler (atom (delay (:handler opts)))]
+      {:handler handler
+       :server  (start (fn [req] (@@handler req)) (dissoc opts :handler))})))
 
 (defmethod ig/halt-key! :server/http
   [_ {:keys [server]}]
-  (stop server))
+  (when server
+    (stop server)))
 
 (defmethod ig/suspend-key! :server/http
   [_ {:keys [handler]}]
-  (reset! handler (promise)))
+  (when handler
+    (reset! handler (promise))))
 
 (defmethod ig/resume-key :server/http
   [k opts old-opts old-impl]

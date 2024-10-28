@@ -1,6 +1,6 @@
 (ns user
   (:require
-   [papercompany.utopia.integrant.state :as state]))
+   [papercompany.utopia.state :as state]))
 
 (defn actions
   ([system name args]

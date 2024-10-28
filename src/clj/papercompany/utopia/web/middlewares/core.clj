@@ -1,4 +1,4 @@
-(ns papercompany.utopia.web.middleware.core
+(ns papercompany.utopia.web.middlewares.core
   (:require
     [papercompany.utopia.env :as env]
     [ring.middleware.defaults :as defaults]
@@ -10,5 +10,4 @@
     (fn [handler]
       (cond-> ((:middleware env/defaults) handler opts)
               true (defaults/wrap-defaults
-                     (assoc-in site-defaults-config [:session :store] cookie-store))
-              ))))
+                     (assoc-in site-defaults-config [:session :store] cookie-store))))))

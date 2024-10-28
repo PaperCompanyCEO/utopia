@@ -1,0 +1,196 @@
+
+
+---- [ null ] ---->
+"(do (in-ns 'shadow.user) nil)"
+<---------
+"nil"
+
+---- [ null ] ---->
+"(require '[flow-storm.api :include-macros true])"
+<---------
+"nil"
+
+---- [ shadow.user ] ---->
+"((requiring-resolve 'hansel.instrument.utils/eval-in-ns-fn-cljs) 'cljs.user '(require '[flow-storm.runtime.debuggers-api :include-macros true]) {:build-id :test})"
+<---------
+"nil"
+
+---- [ null ] ---->
+"(do (in-ns 'shadow.user) nil)"
+<---------
+"nil"
+
+---- [ null ] ---->
+"(require '[flow-storm.api :include-macros true])"
+<---------
+"nil"
+
+---- [ shadow.user ] ---->
+"((requiring-resolve 'hansel.instrument.utils/eval-in-ns-fn-cljs) 'cljs.user '(require '[flow-storm.runtime.debuggers-api :include-macros true]) {:build-id :test})"
+<---------
+"nil"
+
+---- [ null ] ---->
+"(do (in-ns 'shadow.user) nil)"
+<---------
+"nil"
+
+---- [ null ] ---->
+"(require '[flow-storm.api :include-macros true])"
+<---------
+"nil"
+
+---- [ shadow.user ] ---->
+"((requiring-resolve 'hansel.instrument.utils/eval-in-ns-fn-cljs) 'cljs.user '(require '[flow-storm.runtime.debuggers-api :include-macros true]) {:build-id :test})"
+<---------
+"nil"
+
+---- [ null ] ---->
+"(do (in-ns 'shadow.user) nil)"
+<---------
+"nil"
+
+---- [ null ] ---->
+"(require '[flow-storm.api :include-macros true])"
+<---------
+"nil"
+
+---- [ shadow.user ] ---->
+"((requiring-resolve 'hansel.instrument.utils/eval-in-ns-fn-cljs) 'cljs.user '(require '[flow-storm.runtime.debuggers-api :include-macros true]) {:build-id :test})"
+<---------
+"nil"
+
+---- [ null ] ---->
+"(do (in-ns 'shadow.user) nil)"
+<---------
+"nil"
+
+---- [ null ] ---->
+"(require '[flow-storm.api :include-macros true])"
+<---------
+"nil"
+
+---- [ shadow.user ] ---->
+"((requiring-resolve 'hansel.instrument.utils/eval-in-ns-fn-cljs) 'cljs.user '(require '[flow-storm.runtime.debuggers-api :include-macros true]) {:build-id :test})"
+<---------
+nil
+
+---- [ null ] ---->
+"(do (in-ns 'shadow.user) nil)"
+<---------
+"nil"
+
+---- [ null ] ---->
+"(require '[flow-storm.api :include-macros true])"
+<---------
+"nil"
+
+---- [ shadow.user ] ---->
+"((requiring-resolve 'hansel.instrument.utils/eval-in-ns-fn-cljs) 'cljs.user '(require '[flow-storm.runtime.debuggers-api :include-macros true]) {:build-id :test})"
+<---------
+"nil"
+
+---- [ null ] ---->
+"(do (in-ns 'shadow.user) nil)"
+<---------
+"nil"
+
+---- [ null ] ---->
+"(require '[flow-storm.api :include-macros true])"
+<---------
+"nil"
+
+---- [ shadow.user ] ---->
+"((requiring-resolve 'hansel.instrument.utils/eval-in-ns-fn-cljs) 'cljs.user '(require '[flow-storm.runtime.debuggers-api :include-macros true]) {:build-id :test})"
+<---------
+"nil"
+
+---- [ null ] ---->
+"(do (in-ns 'shadow.user) nil)"
+<---------
+"nil"
+
+---- [ null ] ---->
+"(require '[flow-storm.api :include-macros true])"
+<---------
+"nil"
+
+---- [ shadow.user ] ---->
+"((requiring-resolve 'hansel.instrument.utils/eval-in-ns-fn-cljs) 'cljs.user '(require '[flow-storm.runtime.debuggers-api :include-macros true]) {:build-id :test})"
+<---------
+"nil"
+
+---- [ null ] ---->
+"(do (in-ns 'shadow.user) nil)"
+<---------
+"nil"
+
+---- [ null ] ---->
+"(require '[flow-storm.api :include-macros true])"
+<---------
+"nil"
+
+---- [ shadow.user ] ---->
+"((requiring-resolve 'hansel.instrument.utils/eval-in-ns-fn-cljs) 'cljs.user '(require '[flow-storm.runtime.debuggers-api :include-macros true]) {:build-id :test})"
+<---------
+"nil"
+
+---- [ null ] ---->
+"(do (in-ns 'shadow.user) nil)"
+<---------
+"nil"
+
+---- [ null ] ---->
+"(require '[flow-storm.api :include-macros true])"
+<---------
+"nil"
+
+---- [ shadow.user ] ---->
+"((requiring-resolve 'hansel.instrument.utils/eval-in-ns-fn-cljs) 'cljs.user '(require '[flow-storm.runtime.debuggers-api :include-macros true]) {:build-id :test})"
+<---------
+"nil"
+
+---- [ null ] ---->
+"(do (in-ns 'shadow.user) nil)"
+<---------
+"nil"
+
+---- [ null ] ---->
+"(require '[flow-storm.api :include-macros true])"
+<---------
+"nil"
+
+---- [ shadow.user ] ---->
+"((requiring-resolve 'hansel.instrument.utils/eval-in-ns-fn-cljs) 'cljs.user '(require '[flow-storm.runtime.debuggers-api :include-macros true]) {:build-id :test})"
+<---------
+"nil"
+
+---- [ null ] ---->
+"(do (in-ns 'shadow.user) nil)"
+<---------
+"nil"
+
+---- [ null ] ---->
+"(require '[flow-storm.api :include-macros true])"
+<---------
+"nil"
+
+---- [ shadow.user ] ---->
+"((requiring-resolve 'hansel.instrument.utils/eval-in-ns-fn-cljs) 'cljs.user '(require '[flow-storm.runtime.debuggers-api :include-macros true]) {:build-id :test})"
+<---------
+"nil"
+
+---- [ null ] ---->
+"(do (in-ns 'shadow.user) nil)"
+<---------
+"nil"
+
+---- [ null ] ---->
+"(require '[flow-storm.api :include-macros true])"
+<---------
+"nil"
+
+---- [ shadow.user ] ---->
+"((requiring-resolve 'hansel.instrument.utils/eval-in-ns-fn-cljs) 'cljs.user '(require '[flow-storm.runtime.debuggers-api :include-macros true]) {:build-id :test})"
+<---------
+"nil"

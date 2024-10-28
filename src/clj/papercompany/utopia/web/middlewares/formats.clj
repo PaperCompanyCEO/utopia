@@ -1,4 +1,4 @@
-(ns papercompany.utopia.web.middleware.formats
+(ns papercompany.utopia.web.middlewares.formats
   (:require
     [luminus-transit.time :as time]
     [muuntaja.core :as m]))

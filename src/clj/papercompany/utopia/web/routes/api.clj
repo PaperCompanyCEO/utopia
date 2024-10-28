@@ -1,18 +1,24 @@
 (ns papercompany.utopia.web.routes.api
   (:require
-    [papercompany.utopia.web.controllers.health :as health]
-    [papercompany.utopia.web.middleware.exception :as exception]
-    [papercompany.utopia.web.middleware.formats :as formats]
-    [integrant.core :as ig]
-    [reitit.coercion.malli :as malli]
-    [reitit.ring.coercion :as coercion]
-    [reitit.ring.middleware.muuntaja :as muuntaja]
-    [reitit.ring.middleware.parameters :as parameters]
-    [reitit.swagger :as swagger]))
+   [papercompany.utopia.web.controllers.examples :as examples]
+   [papercompany.utopia.web.controllers.cljs :as cljs]
+   [papercompany.utopia.web.controllers.health :as health]
+   [papercompany.utopia.web.middlewares.exception :as exception-middleware]
+   [papercompany.utopia.web.middlewares.formats :as formats-middleware]
+   [papercompany.utopia.web.middlewares.fx-cofx :as fx-cofx-middleware]
+   [papercompany.utopia.web.middlewares.input :as input-middleware]
+   [papercompany.utopia.web.middlewares.transactions :as transactions-middleware]
+   [papercompany.utopia.specs.core :as specs]
+   [integrant.core :as ig]
+   [reitit.coercion.malli :as malli]
+   [reitit.ring.coercion :as coercion]
+   [reitit.ring.middleware.muuntaja :as muuntaja]
+   [reitit.ring.middleware.parameters :as parameters]
+   [reitit.swagger :as swagger]))
 
 (def route-data
   {:coercion   malli/coercion
-   :muuntaja   formats/instance
+   :muuntaja   formats-middleware/instance
    :swagger    {:id ::api}
    :middleware [;; query-params & form-params
                 parameters/parameters-middleware
@@ -28,22 +34,33 @@
                 coercion/coerce-response-middleware
                   ;; coercing request parameters
                 coercion/coerce-request-middleware
-                  ;; exception handling
-                exception/wrap-exception]})
+                ;; input snapshot
+                input-middleware/input-middleware
+                ;; fx-cofx
+                fx-cofx-middleware/fx-cofx-middleware
+                ;; transactions
+                transactions-middleware/transactions-middleware
+                ;; exception handling
+                exception-middleware/wrap-exception]})
 
 ;; Routes
-(defn api-routes [_opts]
+(defn api-routes [opts]
   [["/swagger.json"
     {:get {:no-doc  true
-           :swagger {:info {:title "papercompany.utopia API"}}
+           :swagger {:info {:title "Utopia API"}}
            :handler (swagger/create-swagger-handler)}}]
    ["/health"
-    {:get health/healthcheck!}]])
+    {:get health/healthcheck!}]
+   ["/cljs" (cljs/routes opts)]
+   ["/examples" (examples/routes opts)]])
 
 (derive :reitit.routes/api :reitit/routes)
 
 (defmethod ig/init-key :reitit.routes/api
-  [_ {:keys [base-path]
+  [_ {:keys [env base-path]
       :or   {base-path ""}
       :as   opts}]
-  (fn [] [base-path route-data (api-routes opts)]))
+  (when (not
+         (or (= env :test)
+             (= env :debug)))
+    (fn [] [base-path route-data (api-routes opts)])))

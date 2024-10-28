@@ -4,7 +4,8 @@
    [malli.error :as malli-error]
    [malli.core :as malli]
    [integrant.core :as ig]
-   [next.jdbc :as jdbc]))
+   [next.jdbc :as jdbc]
+   [clojure.edn :as edn]))
 
 (defn with-dynamic-transaction-push-fx-cofx [db-name fx-cofx transactions tx f]
   (let [tx-id-atom (atom nil)
@@ -49,7 +50,9 @@
 
 (defmethod ig/init-key :papercompany.utopia/with-dynamic-transaction
   [_ {:keys [env]}]
-  (if (= env :test)
+  (if (or
+       (= env :test)
+       (= env :debug))
     (fn [db-name _db-config fx-cofx transactions f]
       (with-dynamic-transaction-push-fx-cofx db-name fx-cofx transactions (Object.) f))
     (fn [db-name db-config fx-cofx transactions f]
@@ -84,7 +87,8 @@
 
 (defmethod ig/init-key :papercompany.utopia/dynamic-query
   [_ {:keys [env]}]
-  (if (= env :test)
+  (case env
+    :test
     (fn
       ([db-name fx-cofx _db-config sql-args spec registry]
        (let [cofx-res (malli-generator/generate
@@ -96,6 +100,54 @@
        (let [cofx-res (malli-generator/generate
                        spec
                        {:registry registry})]
+         (dynamic-query-push-fx-cofx db-name fx-cofx cofx-res transactions tx sql-args)
+         cofx-res)))
+    :debug
+    (fn
+      ([db-name fx-cofx _db-config sql-args spec registry]
+       (let [cofx-file-name (str "dbg-inputs/clj/" (read-line))
+             cofx-file-content (slurp cofx-file-name)
+             cofx-res (edn/read-string cofx-file-content)]
+         (when-let [cofx-error (malli/explain
+                                spec
+                                cofx-res
+                                {:registry registry})]
+           (swap!
+            fx-cofx
+            #(conj
+              %
+              {:type :cofx-error
+               :category :dynamic-db
+               :tx nil
+               :name db-name
+               :result {:value cofx-res
+                        :error (malli-error/humanize cofx-error)}}))
+           (throw (ex-info
+                   "cofx-error"
+                   {:type :papercompany/cofx})))
+         (dynamic-query-push-fx-cofx db-name fx-cofx cofx-res nil nil sql-args)
+         cofx-res))
+      ([db-name fx-cofx transactions tx sql-args spec registry]
+       (let [cofx-file-name (str "dbg-inputs/clj/" (read-line))
+             cofx-file-content (slurp cofx-file-name)
+             cofx-res (edn/read-string cofx-file-content)]
+         (when-let [cofx-error (malli/explain
+                                spec
+                                cofx-res
+                                {:registry registry})]
+           (swap!
+            fx-cofx
+            #(conj
+              %
+              {:type :cofx-error
+               :category :dynamic-db
+               :tx nil
+               :name db-name
+               :result {:value cofx-res
+                        :error (malli-error/humanize cofx-error)}}))
+           (throw (ex-info
+                   "cofx-error"
+                   {:type :papercompany/cofx})))
          (dynamic-query-push-fx-cofx db-name fx-cofx cofx-res transactions tx sql-args)
          cofx-res)))
     (fn

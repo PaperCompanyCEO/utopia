@@ -1,0 +1,33 @@
+{:nrepl {:port 7003}
+ :source-paths ["src/cljs"
+                "test/cljs"]
+ :dependencies [[binaryage/devtools "1.0.3"]
+                [nrepl "0.8.3"]
+                [cider/cider-nrepl "0.30.0"]
+                [com.github.flow-storm/flow-storm-inst "4.0.0-alpha5"]
+                [integrant/integrant "0.13.0"]
+                [reagent/reagent "1.2.0"]
+                [re-frame/re-frame "1.4.3"]
+                [metosin/reitit "0.6.0"]
+                [metosin/malli "0.16.4"]
+                [cljs-ajax "0.8.4"]]
+ :builds       {:app {:target     :browser
+                      :output-dir "target/classes/cljsbuild/public/js"
+                      :asset-path "/js"
+                      :modules    {:app {:entries [papercompany.utopia.core]
+                                         :init-fn papercompany.utopia.core/init!-prod}}}
+                :dev {:target :browser
+                      :output-dir "target/classes/cljsbuild/public/js"
+                      :asset-path "/js"
+                      :modules {:app {:entires [papercompany.utopia.core]
+                                      :init-fn papercompany.utopia.core/init!-dev}}}
+                :test {:target :browser
+                       :output-dir "target/classes/cljsbuild/public/js"
+                       :asset-path "/js"
+                       :modules {:app {:entries [papercompany.utopia.core-test]
+                                       :init-fn papercompany.utopia.core-test/init!-test}}}
+                :debug {:target :browser
+                        :output-dir "target/classes/cljsbuild/public/js"
+                        :asset-path "/js"
+                        :modules {:app {:entries [papercompany.utopia.core-test]
+                                        :init-fn papercompany.utopia.core-test/init!-debug}}}}}

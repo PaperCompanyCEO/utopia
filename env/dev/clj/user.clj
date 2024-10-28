@@ -1,17 +1,18 @@
 (ns user
   "Userspace functions you can run by default in your local REPL."
   (:require
-    [clojure.pprint]
-    [clojure.spec.alpha :as s]
-    [clojure.tools.namespace.repl :as repl]
-    [criterium.core :as c]                                  ;; benchmarking
-    [expound.alpha :as expound]
-    [integrant.core :as ig]
-    [integrant.repl :refer [clear go halt prep init reset reset-all]]
-    [integrant.repl.state :as state]
-    [lambdaisland.classpath.watch-deps :as watch-deps]      ;; hot loading for deps
-    [migratus.core :as migratus]
-    [papercompany.utopia.core :refer [start-app]]))
+   [papercompany.utopia.integrant.config :as config]
+   [clojure.pprint]
+   [clojure.spec.alpha :as s]
+   [clojure.tools.namespace.repl :as repl]
+   [criterium.core :as c]                                  ;; benchmarking
+   [expound.alpha :as expound]
+   [integrant.core :as ig]
+   [integrant.repl :refer [clear go halt prep init reset reset-all]]
+   [integrant.repl.state :as state]
+   [lambdaisland.classpath.watch-deps :as watch-deps]      ;; hot loading for deps
+   [migratus.core :as migratus]
+   [papercompany.utopia.core :refer [start-app]]))
 
 ;; uncomment to enable hot loading for deps
 (watch-deps/start! {:aliases [:dev :test]})
@@ -42,7 +43,25 @@
 (def refresh repl/refresh)
 
 (defn migratus []
-  (:papercompany.utopia.effects.utopia-db/utopia-migrations state/system))
+  (:db.sql/utopia-migrations state/system))
 
-(defn actions [name & args]
-  (apply (get (:papercompany.utopia/actions state/system) name) args))
+(defn actions
+  ([system name args]
+   ((get (:papercompany.utopia/actions system) name) args))
+  ([name args]
+   (actions state/system name args)))
+
+(defonce dbg-sys (atom nil))
+
+(defn stop-dbg []
+  (some-> (deref dbg-sys)
+          (ig/halt!)))
+
+(defn start-dbg []
+  (stop-dbg)
+  (->> (config/system-config {:profile :debug
+                              :persist-data? true})
+       (ig/expand)
+       (ig/init)
+       (reset! dbg-sys))
+  nil)

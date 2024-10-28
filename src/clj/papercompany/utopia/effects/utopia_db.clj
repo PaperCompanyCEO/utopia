@@ -9,12 +9,15 @@
    [conman.core :as conman]
    [migratus.core :as migratus]
    [integrant.core :as ig]
-   [next.jdbc :as jdbc]))
+   [next.jdbc :as jdbc]
+   [clojure.edn :as edn]))
 
 (defmethod ig/init-key :db.sql/utopia-connection
   [_ {:keys [env]
       :as pool-spec}]
-  (if (= env :test)
+  (if (or
+       (= env :test)
+       (= env :debug))
     nil
     (conman/connect! (dissoc pool-spec :env))))
 
@@ -47,7 +50,9 @@
 (defmethod ig/init-key :db.sql/utopia-query-fn
   [_ {:keys [conn options filename filenames env]
       :or   {options {}}}]
-  (if (= env :test)
+  (if (or
+       (= env :test)
+       (= env :debug))
     nil
     (let [filenames (or filenames [filename])
           load-queries #(apply conman/bind-connection-map conn options filenames)]
@@ -113,7 +118,9 @@
 
 (defmethod ig/init-key :papercompany.utopia/with-utopia-transaction
   [_ {:keys [env conn]}]
-  (if (= env :test)
+  (if (or
+       (= env :test)
+       (= env :debug))
     (fn [fx-cofx transactions f]
       (with-utopia-transaction-push-fx-cofx fx-cofx transactions (Object.) f))
     (fn [fx-cofx transactions f]
@@ -141,7 +148,8 @@
 
 (defmethod ig/init-key :papercompany.utopia/utopia-query-fn
   [_ {:keys [utopia-query-fn env]}]
-  (if (= env :test)
+  (case env
+    :test
     (fn
       ([fx-cofx name args]
        (let [cofx-res (malli-generator/generate
@@ -153,6 +161,54 @@
        (let [cofx-res (malli-generator/generate
                        ((name utopia-query-fn-spec/cofx-spec) args)
                        {:registry ((name utopia-query-fn-spec/registry) args)})]
+         (utopia-query-fn-push-fx-cofx fx-cofx cofx-res transactions tx name args)
+         cofx-res)))
+    :debug
+    (fn
+      ([fx-cofx name args]
+       (let [cofx-file-name (str "dbg-inputs/clj/" (read-line))
+             cofx-file-content (slurp cofx-file-name)
+             cofx-res (edn/read-string cofx-file-content)]
+         (when-let [cofx-error (malli/explain
+                                ((name utopia-query-fn-spec/cofx-spec) args)
+                                cofx-res
+                                {:registry ((name utopia-query-fn-spec/registry) args)})]
+           (swap!
+            fx-cofx
+            #(conj
+              %
+              {:type :cofx-error
+               :category :utopia-query-fn
+               :tx nil
+               :name name
+               :result {:value cofx-res
+                        :error (malli-error/humanize cofx-error)}}))
+           (throw (ex-info
+                   "cofx-error"
+                   {:type :papercompany/cofx})))
+         (utopia-query-fn-push-fx-cofx fx-cofx cofx-res nil nil name args)
+         cofx-res))
+      ([fx-cofx transactions tx name args]
+       (let [cofx-file-name (str "dbg-inputs/clj/" (read-line))
+             cofx-file-content (slurp cofx-file-name)
+             cofx-res (edn/read-string cofx-file-content)]
+         (when-let [cofx-error (malli/explain
+                                ((name utopia-query-fn-spec/cofx-spec) args)
+                                cofx-res
+                                {:registry ((name utopia-query-fn-spec/registry) args)})]
+           (swap!
+            fx-cofx
+            #(conj
+              %
+              {:type :cofx-error
+               :category :utopia-query-fn
+               :tx nil
+               :name name
+               :result {:value cofx-res
+                        :error (malli-error/humanize cofx-error)}}))
+           (throw (ex-info
+                   "cofx-error"
+                   {:type :papercompany/cofx})))
          (utopia-query-fn-push-fx-cofx fx-cofx cofx-res transactions tx name args)
          cofx-res)))
     (fn
@@ -206,6 +262,7 @@
       :or   {migrate-on-init? true}
       :as   component}]
   (when (and (not (= env :test))
+             (not (= env :debug))
              migrate-on-init?)
     (migratus/migrate component))
   component)

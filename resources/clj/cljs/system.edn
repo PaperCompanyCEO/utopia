@@ -1,0 +1,11 @@
+{:system/env
+ #profile {:prod :prod
+           :dev :dev
+           :test :test
+           :debug :debug}
+
+ :reitit.routes/main {:env #ig/ref :system/env
+                      :base-path ""}
+
+ :router/core {:env #ig/ref :system/env
+               :routes #ig/refset :reitit/routes}}

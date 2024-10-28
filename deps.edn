@@ -1,6 +1,6 @@
 {:paths   ["src/clj"
-           "resources"
-           "src/cljs"]
+           "src/cljs"
+           "resources/clj"]
 
  :deps    {org.clojure/clojure             {:mvn/version "1.12.0"}
 
@@ -34,6 +34,9 @@
            metosin/malli {:mvn/version "0.16.4"}
            metosin/muuntaja                {:mvn/version "0.6.8"}
 
+           ;; Server Side Route
+           selmer/selmer {:mvn/version "1.12.50"}
+
            ;; Web Socket
            com.taoensso/sente {:mvn/version "1.17.0"}
 
@@ -48,7 +51,9 @@
 
            ;; JSON
            cheshire/cheshire {:mvn/version "5.13.0"}}
- :aliases {:build {:deps {io.github.clojure/tools.build {:mvn/version "0.9.6"}}
+ :aliases {:build {:deps {io.github.clojure/tools.build {:mvn/version "0.9.6"}
+                          babashka/fs {:mvn/version "0.1.11"}
+                          babashka/process {:mvn/version "0.3.11"}}
                    :ns-default build}
 
            :dev  {:extra-deps  {com.lambdaisland/classpath      {:mvn/version "0.5.48"}
@@ -60,7 +65,7 @@
                                 ring/ring-devel                 {:mvn/version "1.12.0"}
                                 ring/ring-mock                  {:mvn/version "0.4.0"}
                                 org.clojure/tools.namespace     {:mvn/version "1.4.4"}}
-                  :extra-paths ["env/dev/clj" "env/dev/resources" "test/clj"]}
+                  :extra-paths ["env/dev/clj" "env/dev/resources/clj" "test/clj" "target/classes/cljsbuild"]}
            
            :nrepl {:extra-deps {nrepl/nrepl {:mvn/version "1.1.0"}}
                    :main-opts  ["-m" "nrepl.cmdline" "-i"]}
@@ -78,21 +83,5 @@
                                 ring/ring-mock                  {:mvn/version "0.4.0"}
                                 io.github.kit-clj/kit-generator {:mvn/version "0.2.3"}
                                 org.clojure/tools.namespace     {:mvn/version "1.4.4"}}
-                  :exec-fn      investwith.GAT-X105.core-test/main
-                  :extra-paths ["env/dev/clj" "env/dev/resources" "env/test/resources" "test/clj"]}
-           
-           :cljs {:classpath-overrides {org.clojure/clojurescript nil}
-                  :deps  {thheller/shadow-cljs {:mvn/version "2.25.6"
-                                                :exclusions [org.clojure/clojurescript]}
-                          binaryage/devtools              {:mvn/version "1.0.3"}
-                          nrepl/nrepl                     {:mvn/version "0.8.3"}
-                          cider/cider-nrepl               {:mvn/version "0.50.2"}
-                          cljs-ajax/cljs-ajax             {:mvn/version "0.8.4"}
-                          reagent/reagent                 {:mvn/version "1.2.0"}
-                          com.taoensso/sente              {:mvn/version "1.17.0"}
-                          re-frame/re-frame               {:mvn/version "1.4.3"}
-                          com.github.flow-storm/clojurescript {:mvn/version "1.11.132-6"}
-                          com.github.flow-storm/flow-storm-inst {:mvn/version "3.17.4"}}
-                  :jvm-opts ["-Dcljs.storm.instrumentOnlyPrefixes=investwith.GAT-X105,clojure.core.async/go,hiccup"
-                             "-Dcljs.storm.instrumentEnable=true"
-                             "-Dflowstorm.startRecording=false"]}}}
+                  :exec-fn      papercompany.utopia.core-test/main
+                  :extra-paths ["env/dev/clj" "env/dev/resources/clj" "env/test/resources/clj" "test/clj"]}}}

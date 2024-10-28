@@ -8,9 +8,9 @@ Start the server with:
 (go)
 ```
 
-The default API is available under http://localhost:3000/api
+The default API is available under http://localhost:8080/api
 
-System configuration is available under `resources/system.edn`.
+System configuration is available under `resources/clj/system.edn`.
 
 To reload changes:
 

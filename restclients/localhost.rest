@@ -1,0 +1,8 @@
+#
+GET http://localhost:8080/api/examples/test/1234?msg3=33
+MSG1_df!dfd: 2323
+Content-Type: application/json
+
+{
+        "msg4": [1356, 2124]
+}

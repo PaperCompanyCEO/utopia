@@ -34,7 +34,7 @@
      :category :utopia-query-fn
      :tx 0
      :name :get-examples
-     :result {:get-examples {}}}]
+     :result {}}]
    [:const {}
     {:type :fx
      :category :utopia-tx
