@@ -8,4 +8,8 @@
                       :base-path ""}
 
  :router/core {:env #ig/ref :system/env
-               :routes #ig/refset :reitit/routes}}
+               :routes #ig/refset :reitit/routes}
+ 
+ :cofx/env {:env #ig/ref :system/env}
+
+ :fx/test-alert {:env #ig/ref :system/env}}

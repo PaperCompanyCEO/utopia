@@ -7,3 +7,4 @@ log/
 .shadow-cljs/
 node_modules/
 modules/
+repl-client-debug

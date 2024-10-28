@@ -7,5 +7,4 @@
 
 (defmethod ig/init-key :router/core
   [_ {:keys [env routes]}]
-  (reitit-frontend/router ["" {:env env} routes]
-                          {:compile reitit-coercion/compile-request-coercers}))
+  (reitit-frontend/router ["" {:env env} routes]))

@@ -12,8 +12,20 @@
 (re-frame-alpha/reg-event-fx
  :push-state
  []
- (fn [{:keys [db]
-       :as cofx} [_ dir page]]
-   (assoc-in cofx
-             [:db :pages dir]
-             page)))
+ (fn [{:keys [db]} [_ dir page]]
+   {:db (assoc-in db
+                  [:pages dir]
+                  page)}))
+
+(re-frame-alpha/reg-event-fx
+ :route
+ []
+ (fn [{} [_ name path-params query-params]]
+   {:route [name path-params query-params]}))
+
+(re-frame-alpha/reg-event-fx
+ :test
+ [(re-frame-alpha/inject-cofx :env)]
+ (fn [{:keys [env]} [_]]
+   {:alert env
+    :test-alert nil}))

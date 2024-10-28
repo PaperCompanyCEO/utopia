@@ -2,6 +2,8 @@
     (:require
      [papercompany.utopia.doms.main-page :as main-page]
      [papercompany.utopia.events.core]
+     [papercompany.utopia.effects.cofx.core]
+     [papercompany.utopia.effects.fx.core]
      [papercompany.utopia.subscriptions.core]
      [papercompany.utopia.reitit.core]
      [papercompany.utopia.integrant.config :as config]
